@@ -208,6 +208,7 @@ Any sensitive personal, system, network, or authentication information should be
 This repository will be updated as I continue through the PEN-103 curriculum.
 
 **Learning → Practicing → Documenting → Improving**
+cd prompts xd
 
 ---
 
