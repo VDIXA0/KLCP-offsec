@@ -138,6 +138,46 @@ The debconf databases are root-protected, so a normal user cannot read them. Rea
 - Preseed lines follow the form `d-i question type value`.
 - debconf data is protected by file permissions.
 
+- ## Lab 3 — Kernel Command Line and Boot Messages
+
+**Objective:** Read the parameters the kernel was booted with and look at the early boot messages.
+**Environment:** Kali Linux VM (VirtualBox), terminal.
+
+### Step 1 — Read the kernel command line
+![Command line](images/lab3-01-cmdline.png)
+
+`/proc/cmdline` holds the boot parameters. `tr ' ' '\n'` puts each parameter on its own line, and `grep -E` highlights the ones of interest. `dmesg | head -30` then shows the first kernel messages.
+
+| Parameter | Meaning |
+|---|---|
+| `BOOT_IMAGE=/boot/vmlinuz-6.19.14+kali-amd64` | Kernel image that was loaded |
+| `root=UUID=...` | Device used as the root filesystem |
+| `ro` | Root filesystem is mounted read-only at first |
+| `quiet` | Reduces boot messages on screen |
+| `splash` | Shows the boot splash screen |
+
+### Step 2 — Filter the boot messages
+![dmesg filter](images/lab3-02-dmesg-filter.png)
+
+`dmesg | grep -iE 'boot|kernel|command'` keeps only the lines about boot, kernel and command. The kernel command line appears again at the start of the log, and systemd lines show kernel modules and file systems being set up.
+
+### Commands used
+
+| Command | Purpose |
+|---|---|
+| `cat /proc/cmdline` | Show the kernel boot parameters |
+| `cat /proc/cmdline \| tr ' ' '\n'` | Show one parameter per line |
+| `cat /proc/cmdline \| grep -E 'quiet\|splash\|root\|ro\|rw'` | Highlight selected parameters |
+| `dmesg \| head -30` | Show the first kernel messages |
+| `dmesg \| grep -iE 'boot\|kernel\|command'` | Filter boot messages by keyword |
+
+### Results and takeaways
+- The kernel was booted from `vmlinuz-6.19.14+kali-amd64` with `ro quiet splash`.
+- `dmesg` shows hardware detection and boot steps, including the VirtualBox environment.
+- `/proc/cmdline` and `dmesg` are the first places to look when checking how a system booted.
+
+---
+
 ---
 
 ## Before publishing
